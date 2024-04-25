@@ -64,6 +64,7 @@ class ActivityContextManager: ContextManager {
         let currentActivityId = os_activity_get_identifier(activity, nil)
         var activityState = os_activity_scope_state_s()
         os_activity_scope_enter(activity, &activityState)
+        dso.deallocate()
         return (currentActivityId, activityState)
     }
 
@@ -72,9 +73,9 @@ class ActivityContextManager: ContextManager {
         
         for (activityKey, activity) in contextMap where value === activity[key.rawValue] {
             contextMap[activityKey]?[key.rawValue] = nil
-          if contextMap[activityKey]?.isEmpty ?? false {
-            contextMap[activityKey] = nil
-          }
+            if contextMap[activityKey]?.isEmpty ?? false {
+                contextMap[activityKey] = nil
+            }
         }
         if let scope = objectScope.object(forKey: value) {
             var scope = scope.scope
